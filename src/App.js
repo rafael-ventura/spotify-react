@@ -14,6 +14,14 @@ function App() {
   const [topTracks, setTopTracks] = useState([])
   const [topArtists, setTopArtists] = useState([])
   const [me, setMe] = useState("")
+
+  const SCOPES = [
+    "user-top-read",
+    "user-read-recently-played",
+    "user-read-private",
+    "user-read-email"
+  ]
+
   useEffect(() => {
     const hash = window.location.hash
     let token = window.localStorage.getItem("token")
@@ -60,13 +68,13 @@ function App() {
   }
 
   const getTopTracks = async () => {
-    const data = await axios.get("https://api.spotify.com/v1/me/top/tracks?limit=50", {
+    const data = await axios.get("https://api.spotify.com/v1/me/top/tracks", {
       headers: {
         Authorization: `Bearer ${token}`
       },
       params: {
         type: "tracks",
-        time_range: 'medium_term',
+        time_range: 'short_term',
         limit: 3
       }
     })
@@ -78,7 +86,8 @@ function App() {
     const { data } = await axios.get("https://api.spotify.com/v1/me/top/artists",
       {
         headers: {
-          Authorization: `Bearer ${token}`
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json'
         },
         params: {
           time_range: 'short_term',
@@ -87,6 +96,7 @@ function App() {
       })
 
     setTopArtists(data.items)
+    console.log(data.items)
   }
 
   const getMe = async () => {
@@ -101,10 +111,10 @@ function App() {
 
   return (
     <div className="App">
-      <header className='App=header'>
+      <header className='App-header'>
         <h1>Spotify React App</h1>
         {!token ?
-          <Button variant="contained" color="success" href={`${AUTH_ENDPOINT}?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=${RESPONSE_TYPE}`}>  Conectar no Spotify  </Button>
+          <Button variant="contained" color="success" href={`${AUTH_ENDPOINT}?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&scope=${SCOPES}&response_type=${RESPONSE_TYPE}`}>  Conectar no Spotify  </Button>
           :
           <Button variant="contained" color="error" onClick={logout}> Logout </Button>
         }
@@ -125,7 +135,6 @@ function App() {
       <br />
       <br />
       {renderArtists()}
-      {/* {getMe()} */}
       {me ?
         <div>
           <p>{me.display_name} </p>
