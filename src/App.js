@@ -1,9 +1,19 @@
 import './App.css';
 import { useEffect, useState } from 'react';
-import { Button } from '@mui/material';
+import { Button, Typography, TextField, Grid } from '@mui/material';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 import axios from 'axios';
+import { inputLabelClasses } from "@mui/material/InputLabel";
+import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 
 function App() {
+  const theme = createTheme({
+    palette: {
+      background: {
+        paper: '#fff',
+      }
+    }
+  });
   const CLIENT_ID = "68d1b43e09794d51b64ad4083e57429f"
   const REDIRECT_URI = "http://localhost:3000"
   const AUTH_ENDPOINT = "https://accounts.spotify.com/authorize"
@@ -13,7 +23,7 @@ function App() {
   const [artists, setArtists] = useState([])
   const [topTracks, setTopTracks] = useState([])
   const [topArtists, setTopArtists] = useState([])
-  const [me, setMe] = useState("")
+  const [userInfo, setUserInfo] = useState("")
 
   const SCOPES = [
     "user-top-read",
@@ -50,7 +60,7 @@ function App() {
       params: {
         q: searchKey,
         type: "artist",
-        limit: 5,
+        limit: 2,
         market: "BR"
       }
     })
@@ -68,7 +78,7 @@ function App() {
   }
 
   const getTopTracks = async () => {
-    const data = await axios.get("https://api.spotify.com/v1/me/top/tracks", {
+    const { data } = await axios.get("https://api.spotify.com/v1/me/top/tracks", {
       headers: {
         Authorization: `Bearer ${token}`
       },
@@ -80,6 +90,7 @@ function App() {
     })
 
     setTopTracks(data.items)
+    console.log(data.items)
   }
 
   const getTopArtists = async () => {
@@ -99,53 +110,98 @@ function App() {
     console.log(data.items)
   }
 
-  const getMe = async () => {
+  const getUserInfo = async () => {
     const { data } = await axios.get("https://api.spotify.com/v1/me", {
       headers: {
         Authorization: `Bearer ${token}`
       },
     })
 
-    setMe(data)
+    setUserInfo(data)
   }
 
   return (
     <div className="App">
       <header className='App-header'>
-        <h1>Spotify React App</h1>
+        <Typography variant='h1'
+          sx={{ color: "#1ed760" }}> Spotify React App </Typography>
+
         {!token ?
           <Button variant="contained" color="success" href={`${AUTH_ENDPOINT}?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&scope=${SCOPES}&response_type=${RESPONSE_TYPE}`}>  Conectar no Spotify  </Button>
           :
           <Button variant="contained" color="error" onClick={logout}> Logout </Button>
         }
         <br />
-        <br />
         <Button variant="contained" color="primary" onClick={getTopTracks}> Most Listen Tracks </Button>
-        <br />
         <br />
         <Button variant="contained" color="primary" onClick={getTopArtists}>  Most Listen Artists </Button>
         <br />
-        <br />
-      </header>
 
-      <form onSubmit={searchArtists}>
-        <input type="text" onChange={e => setSearchKey(e.target.value)} />
-        <button type={"submit"}>Search</button>
-      </form>
-      <br />
-      <br />
-      {renderArtists()}
-      {me ?
         <div>
-          <p>{me.display_name} </p>
-          <p>{me.email} </p>
-          <p>{me.followers.total} </p>
-          <img src={me.images[0].url} alt="" />
-        </div>
-        :
-        <p> No info</p>
-      }
-      <Button variant="contained" color="primary" onClick={getMe}>  Get Information </Button>
+          {topArtists.map((artist) => (
+            <div key={artist.id}>
+              <Typography variant='h2'> {artist.name} </Typography>
+              <Typography variant='h4'> {artist.followers.total} Fans </Typography>
+              <ul> {artist.genres.map((genre) => <li> <Typography variant='subtitle'> {genre} </Typography>  </li>)}</ul>
+              <img width={"50%"} src={artist.images[0].url} alt="" />
+            </div>
+          ))
+          }
+        </div >
+
+        <form onSubmit={searchArtists} >
+          <Grid container spacing={1}>
+            <Grid xs={2}></Grid>
+            <Grid xs={4}>
+              <TextField id="outlined-basic"
+                label="Digite um Artista"
+                variant="outlined"
+                size='small'
+                sx={{
+                  input: {
+                    color: "#1ed760",
+                    borderRadius: "6%",
+                    borderColor: "#fff"
+
+                  }
+                }}
+                InputLabelProps={{
+                  sx: {
+                    color: "#1ed760",
+                    [`&.${inputLabelClasses.shrink}`]: {
+                      // set the color of the label when shrinked (usually when the TextField is focused)
+                      color: "#1ed760"
+                    }
+                  }
+                }}
+                onChange={e => setSearchKey(e.target.value)} />
+            </Grid>
+
+            <Button type={"submit"} variant="contained" color="primary">  Get Information </Button>
+
+            <Grid xs={1}>
+              <Button> <CloseOutlinedIcon sx={{ color: "red" }} ></CloseOutlinedIcon> </Button>
+            </Grid>
+          </Grid>
+        </form>
+
+        {renderArtists()}
+
+        {
+          userInfo ?
+            <div>
+              < p > {userInfo.display_name} </p>
+              <p>{userInfo.email} </p>
+              <p>{userInfo.followers.total} followers</p>
+              <img src={userInfo.images[0].url} alt="" />
+            </div>
+            :
+            <p> No info</p>
+        }
+        <Button variant="contained" color="primary" onClick={getUserInfo}>  Get Information </Button>
+
+      </header >
+
     </div >
   );
 }
