@@ -24,6 +24,18 @@
   color: white;
 }
 
+.ul-hor {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #894554;
+}
+
+.li-hor {
+  float: left;
+}
+
 .App-link {
   color: #61dafb;
 }
@@ -32,6 +44,7 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
