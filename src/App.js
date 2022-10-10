@@ -52,7 +52,7 @@ function App() {
         {!token ?
           <Button type="primary" onClick={loginSpotify}>   Login     </Button>
           :
-          <Button type="primary" onClick={logout}>   Logout     </Button>
+          <Button style={{ background: "#b23b3b", borderColor: "#6b1d1d" }} type="primary" onClick={logout}>   Logout     </Button>
         }
         <br />
 
