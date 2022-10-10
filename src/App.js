@@ -1,11 +1,9 @@
 import './App.css';
 import { useEffect, useState } from 'react';
-import axios from 'axios';
 import Forms from './Forms';
 import React from 'react';
-import "antd/dist/antd.css";
+import 'antd/dist/antd.min.css';
 import { Button } from 'antd';
-import { LoginOutlined, LogoutOutlined } from '@ant-design/icons';
 
 
 function App() {
@@ -49,7 +47,7 @@ function App() {
   return (
     <div className="App">
       <header className='App-header'>
-        <h1 > Spotify React App </h1>
+        <h1 className='title' > Spotify Account Info </h1>
 
         {!token ?
           <Button type="primary" onClick={loginSpotify}>   Login     </Button>

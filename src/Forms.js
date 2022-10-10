@@ -1,26 +1,41 @@
 import './App.css';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Form, Radio } from 'antd';
+import { Form, Radio, Card, Col, Row, Space, Divider } from 'antd';
 import React from 'react';
+const { Meta } = Card;
 
 
 function Forms(props) {
-    const [type, setType] = useState('tracks')
-    const [period, setPeriod] = useState('short_term')
+    const [type, setType] = useState('')
+    const [period, setPeriod] = useState('')
     const [topsTracks, setTopTracks] = useState([])
     const [topsArtists, setTopArtists] = useState([])
+    const [isTrackCard, setIsTrackCard] = useState(true)
 
     useEffect(() => {
-        // Atualiza o título do documento usando a API do browser
-        if (props.token) {
+        if (type && period) {
             console.log(type);
             console.log(period);
             console.log(props.token);
             getTop()
         }
-    }, [props.token, type, period]);
+    }, [props.token, period]);
 
+    const setTypeButton = (e) => {
+        console.log(e.target.value);
+        setType(e.target.value)
+        if (e.target.value === 'artists') {
+            setIsTrackCard(false)
+        } else if (e.target.value === 'tracks') {
+            setIsTrackCard(true)
+        }
+
+    }
+    const setPeriodButton = (e) => {
+        console.log(e.target.value);
+        setPeriod(e.target.value)
+    }
     const getTop = async (e) => {
         const { data } = await axios.get(`https://api.spotify.com/v1/me/top/${type}`, {
             headers: {
@@ -31,36 +46,74 @@ function Forms(props) {
                 time_range: period,
                 limit: 30
             }
-        })
-        if (type == 'artists') {
+        },)
+        if (type === 'artists') {
             setTopArtists(data.items)
-        } else if (type == 'tracks') {
+            renderArtists()
+
+        } else if (type === 'tracks') {
             setTopTracks(data.items)
+            renderTracks()
         }
-        console.log(data.items)
+
     }
-    const setTypeButton = (e) => {
-        console.log(e.target.value);
-        setType(e.target.value)
+
+
+    const renderTracks = () => {
+        if (topsTracks) {
+            return topsTracks.map((track, index) => (
+                <Col span={3}>
+                    <div className="site-card-wrapper">
+                        <Card
+                            hoverable
+                            style={{
+                                width: 200,
+
+                            }}
+                            cover={
+                                < img alt='track' src={track.album.images[0].url} />}>
+                            <Meta title={track.name} description={track.artists[0].name} />
+
+                        </Card >
+
+                        <br />
+                    </div >
+                </Col>
+
+            ))
+        }
     }
-    const setPeriodButton = (e) => {
-        console.log(e.target.value);
-        setPeriod(e.target.value)
+    const renderArtists = () => {
+        if (topsArtists) {
+            return topsArtists.map((artist) => (
+                <Col span={3}>
+                    <div className="site-card-wrapper">
+                        <Card
+                            hoverable
+                            style={{
+                                width: 200,
+
+                            }}
+                            cover={
+                                < img alt='artist' src={artist.images[0].url} />}>
+                            <Meta title={artist.name} />
+                        </Card >
+                        <br />
+                    </div >
+                </Col>
+            ))
+        }
     }
 
     return (
         <div>
             <Form
                 name='form'
-                onFinish={getTop}
                 autoComplete="off"
-                initialValues={{
-                    'inputNumberValues': 5
-                }}
             >
                 <Form.Item
                     onChange={setTypeButton}
-                    name="Type">
+                    name="type">
                     <Radio.Group
 
                         buttonStyle="solid"
@@ -75,10 +128,9 @@ function Forms(props) {
                 <Form.Item
                     onChange={setPeriodButton}
                     name="period"
-
                 >
                     <Radio.Group
-
+                        // defaultValue={'short_term'}
                         buttonStyle="solid"
                         style={{
                             marginTop: 16,
@@ -91,33 +143,18 @@ function Forms(props) {
                 </Form.Item>
 
             </Form>
+            {isTrackCard
+                ?
+                <Row gutter={[16, 24]}>
+                    {renderTracks()}
+                </Row>
+                :
+                <Row gutter={[16, 24]}>
+                    {renderArtists()}
+                </Row>
+            }
 
-            <div>
 
-                {type === 'artists'
-                    ?
-                    topsArtists.map((artist) => (
-                        <div key={artist.id}>
-                            <h2> {artist.name} </h2>
-                            {/* <h4> {artist.followers.total} Fans </h4> */}
-                            <ul> {artist.genres.map((genre) => <li>  {genre}   </li>)}</ul>
-                            <img width={"50%"} src={artist.images[0].url} alt="" />
-                        </div>
-
-                    ))
-                    :
-                    <ul>
-                        {topsTracks.map((track) => (
-                            <div key={track.id}>
-                                <li> <p> <b> {track.name} </b> -  {track.artists[0].name} </p> </li>
-                                <li> <p> {track.album.name} </p> </li>
-                                <img width={'20%'} src={track.album.images[0].url} alt="" />
-                                <p> ______________________________________</p>
-                            </div>
-                        ))}
-                    </ul>
-                }
-            </div >
         </div >
     );
 }
