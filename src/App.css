@@ -45,6 +45,79 @@
   color: #61dafb;
 }
 
+.table-header {
+  background-color: #1ed760;
+  margin-top: 5%;
+  color: #282c34;
+  font-size: 50px;
+}
+
+.table-body {
+  background-color: #a3f7c4;
+  color: #282c34;
+  font-size: 30px;
+  margin-top: 1%;
+}
+
+table td,
+th {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+table {
+  width: 100%;
+  font-size: 20px;
+  table-layout: fixed;
+}
+
+table th {
+  text-align: left;
+  background-color: #04AA6D;
+  color: white;
+  font-size: 20px;
+
+}
+
+table td {
+  font-size: 15px;
+  color: #282c34;
+  white-space: -o-pre-wrap;
+  word-wrap: break-word;
+  white-space: pre-wrap;
+  white-space: -moz-pre-wrap;
+  white-space: -pre-wrap;
+
+}
+
+.divlouca {
+  width: 50%;
+  margin: 0 auto;
+}
+
+.download-btn {
+  text-align: right;
+  display: flex;
+  margin: auto;
+  margin-bottom: 5%;
+  margin-right: 8%;
+}
+
+table tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+table tr:hover {
+  background-color: #ddd;
+}
+
+table img {
+  border-radius: 50%;
+  width: 80px;
+  height: 80px;
+}
+
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);

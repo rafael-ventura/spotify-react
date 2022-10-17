@@ -7,8 +7,8 @@ import { Button } from 'antd';
 
 
 function App() {
-  const CLIENT_ID = "68d1b43e09794d51b64ad4083e57429f"
-  const REDIRECT_URI = "https://tsydolmir.github.io/spotify-react"
+  const CLIENT_ID = "03a01dce5b7a46fc9b62cb8a7542d35b"
+  const REDIRECT_URI = "http://localhost:3000"
   const AUTH_ENDPOINT = "https://accounts.spotify.com/authorize"
   const RESPONSE_TYPE = "token"
   const [token, setToken] = useState("")

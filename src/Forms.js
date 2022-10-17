@@ -1,17 +1,19 @@
 import './App.css';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
-import { Form, Radio, Card, Col, Row, Space, Divider } from 'antd';
-import React from 'react';
-const { Meta } = Card;
-
+import { Form, Radio, Card, Col, Button, Row, Space, Divider } from 'antd';
+import TableContainer from './TableContainer';
+import * as htmlToImage from 'html-to-image';
 
 function Forms(props) {
+    const { Meta } = Card;
     const [type, setType] = useState('')
     const [period, setPeriod] = useState('')
     const [topsTracks, setTopTracks] = useState([])
     const [topsArtists, setTopArtists] = useState([])
     const [isTrackCard, setIsTrackCard] = useState(true)
+    const [isTrackTableReady, setIsTrackTableReady] = useState(false)
+    const domEl = useRef(null);
 
     useEffect(() => {
         if (type && period) {
@@ -33,6 +35,7 @@ function Forms(props) {
 
     }
     const setPeriodButton = (e) => {
+        console.log(topsTracks);
         console.log(e.target.value);
         setPeriod(e.target.value)
     }
@@ -53,11 +56,11 @@ function Forms(props) {
 
         } else if (type === 'tracks') {
             setTopTracks(data.items)
+            setIsTrackTableReady(true)
             renderTracks()
         }
 
     }
-
 
     const renderTracks = () => {
         if (topsTracks) {
@@ -105,6 +108,17 @@ function Forms(props) {
         }
     }
 
+    const downloadImage = async () => {
+        const urlPath = await htmlToImage.toPng(domEl.current)
+
+        const link = document.createElement('a');
+        link.download = 'most_listen.png';
+        link.href = urlPath;
+        link.click();
+
+    }
+
+
     return (
         <div>
             <Form
@@ -142,8 +156,20 @@ function Forms(props) {
                     </Radio.Group>
                 </Form.Item>
 
+                <button className='download-btn' onClick={downloadImage}> Download List </button>
             </Form>
-            {isTrackCard
+
+            <br />
+            <br />
+            {isTrackTableReady ?
+                <div className='divlouca' id='domEl' ref={domEl}>
+                    <TableContainer data={topsTracks} />
+                </div>
+                :
+                <div></div>
+            }
+
+            {/* {isTrackCard
                 ?
                 <Row gutter={[16, 24]}>
                     {renderTracks()}
@@ -152,7 +178,7 @@ function Forms(props) {
                 <Row gutter={[16, 24]}>
                     {renderArtists()}
                 </Row>
-            }
+            } */}
 
 
         </div >
