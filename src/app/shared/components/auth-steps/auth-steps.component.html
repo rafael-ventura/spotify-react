@@ -20,8 +20,8 @@
       <div class="step-info">
         <h3>Choose Content</h3>
         <div class="choice-buttons" *ngIf="isLoggedIn && !selectedType" [@fadeIn]>
-          <p-button label="Top Albums" icon="pi pi-images"
-            (onClick)="typeSelect.emit('albums')"
+          <p-button label="Top Artists" icon="pi pi-users"
+            (onClick)="typeSelect.emit('artists')"
             styleClass="p-button-text">
           </p-button>
           <p-button label="Top Tracks" icon="pi pi-music"

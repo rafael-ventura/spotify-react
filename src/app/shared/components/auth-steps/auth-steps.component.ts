@@ -16,12 +16,12 @@ import { trigger, transition, style, animate } from '@angular/animations';
 })
 export class AuthStepsComponent {
   @Input() isLoggedIn = false;
-  @Input() selectedType: 'albums' | 'tracks' | null = null;
+  @Input() selectedType: 'artists' | 'tracks' | null = null;
   @Input() selectedTimeRange: string | null = null;
   @Input() loading = false;
 
   @Output() loginClick = new EventEmitter<void>();
-  @Output() typeSelect = new EventEmitter<'albums' | 'tracks'>();
+  @Output() typeSelect = new EventEmitter<'artists' | 'tracks'>();
   @Output() timeRangeSelect = new EventEmitter<string>();
 
   timeRanges = [

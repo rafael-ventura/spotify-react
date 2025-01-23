@@ -12,21 +12,8 @@ import { trigger, transition, style, animate } from '@angular/animations';
         <img [src]="artist.images[0]?.url" [alt]="artist.name">
         <div class="info">
           <h3>{{artist.name}}</h3>
-          <div class="genres">
-            <span *ngFor="let genre of artist.genres.slice(0, 3); let last = last">
-              {{genre}}{{!last ? ', ' : ''}}
-            </span>
-          </div>
-          <div class="details">
-            <span class="popularity" [title]="'Popularity: ' + artist.popularity + '%'">
-              <i class="pi pi-chart-bar"></i>
-              {{artist.popularity}}%
-            </span>
-            <span class="followers">
-              <i class="pi pi-users"></i>
-              {{formatFollowers(artist.followers.total)}}
-            </span>
-          </div>
+          <p>{{artist.genres[0]}}</p>
+          <p class="followers">{{artist.followers.total | number}} followers</p>
         </div>
       </div>
     </div>
@@ -45,12 +32,6 @@ import { trigger, transition, style, animate } from '@angular/animations';
       background: rgba(255, 255, 255, 0.05);
       border-radius: 8px;
       gap: 1rem;
-      transition: transform 0.2s ease;
-
-      &:hover {
-        transform: translateX(10px);
-        background: rgba(255, 255, 255, 0.08);
-      }
     }
 
     .rank {
@@ -61,43 +42,27 @@ import { trigger, transition, style, animate } from '@angular/animations';
     }
 
     img {
-      width: 80px;
-      height: 80px;
+      width: 60px;
+      height: 60px;
       border-radius: 50%;
       object-fit: cover;
     }
 
     .info {
-      flex: 1;
-
       h3 {
         margin: 0;
         color: white;
-        font-size: 1.2rem;
       }
 
-      .genres {
-        color: #b3b3b3;
+      p {
         margin: 0.25rem 0;
-        font-style: italic;
+        color: #b3b3b3;
+        text-transform: capitalize;
       }
 
-      .details {
-        display: flex;
-        gap: 1rem;
-        margin-top: 0.5rem;
+      .followers {
         font-size: 0.9rem;
-        color: #b3b3b3;
-
-        span {
-          display: flex;
-          align-items: center;
-          gap: 0.3rem;
-        }
-
-        i {
-          color: var(--spotify-green);
-        }
+        opacity: 0.8;
       }
     }
   `],
@@ -113,14 +78,4 @@ import { trigger, transition, style, animate } from '@angular/animations';
 })
 export class ArtistListComponent {
   @Input() artists: any[] = [];
-
-  formatFollowers(num: number): string {
-    if (num >= 1000000) {
-      return (num / 1000000).toFixed(1) + 'M';
-    }
-    if (num >= 1000) {
-      return (num / 1000).toFixed(1) + 'K';
-    }
-    return num.toString();
-  }
 }

@@ -46,6 +46,7 @@ export class SpotifyApiService {
 
   getTopArtists(timeRange: string): Observable<any[]> {
     return this.http.get(`${this.baseUrl}/me/top/artists`, {
+      headers: this.getHeaders(),
       params: {
         limit: '50',
         time_range: timeRange
