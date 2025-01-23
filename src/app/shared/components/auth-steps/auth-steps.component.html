@@ -1,0 +1,63 @@
+<div class="steps-container">
+  <!-- Login Step -->
+  <div class="step" [class.active]="!isLoggedIn" [class.completed]="isLoggedIn">
+    <div class="step-content" (click)="!isLoggedIn && loginClick.emit()">
+      <div class="step-number">1</div>
+      <div class="step-info">
+        <h3>Connect with Spotify</h3>
+        <p>Login to access your music history</p>
+      </div>
+      <i class="pi" [class.pi-chevron-right]="!isLoggedIn"
+                  [class.pi-check]="isLoggedIn"></i>
+    </div>
+  </div>
+
+  <!-- Content Type Step -->
+  <div class="step" [class.active]="isLoggedIn && !selectedType"
+                   [class.disabled]="!isLoggedIn">
+    <div class="step-content" [class.clickable]="isLoggedIn && !selectedType">
+      <div class="step-number">2</div>
+      <div class="step-info">
+        <h3>Choose Content</h3>
+        <div class="choice-buttons" *ngIf="isLoggedIn && !selectedType" [@fadeIn]>
+          <p-button label="Top Albums" icon="pi pi-images"
+            (onClick)="typeSelect.emit('albums')"
+            styleClass="p-button-text">
+          </p-button>
+          <p-button label="Top Tracks" icon="pi pi-music"
+            (onClick)="typeSelect.emit('tracks')"
+            styleClass="p-button-text">
+          </p-button>
+        </div>
+        <p *ngIf="!isLoggedIn">Select what you want to see</p>
+        <p *ngIf="isLoggedIn && selectedType">{{selectedType | titlecase}} selected</p>
+      </div>
+      <i class="pi" [class.pi-chevron-right]="!selectedType"
+                  [class.pi-check]="selectedType"></i>
+    </div>
+  </div>
+
+  <!-- Time Range Step -->
+  <div class="step" [class.active]="selectedType && !selectedTimeRange"
+                   [class.disabled]="!selectedType">
+    <div class="step-content" [class.clickable]="selectedType && !selectedTimeRange">
+      <div class="step-number">3</div>
+      <div class="step-info">
+        <h3>Select Time Range</h3>
+        <div class="time-buttons" *ngIf="selectedType && !selectedTimeRange" [@fadeIn]>
+          <p-button *ngFor="let range of timeRanges"
+            [label]="range.label"
+            styleClass="p-button-text"
+            (onClick)="timeRangeSelect.emit(range.value)">
+          </p-button>
+        </div>
+        <p *ngIf="!selectedType">Choose your preferred time period</p>
+        <p *ngIf="selectedTimeRange">{{getTimeRangeLabel(selectedTimeRange)}}</p>
+      </div>
+      <i class="pi" [class.pi-chevron-right]="!selectedTimeRange"
+                  [class.pi-check]="selectedTimeRange"></i>
+    </div>
+  </div>
+</div>
+
+<p-progressSpinner *ngIf="loading" styleClass="custom-spinner"></p-progressSpinner>

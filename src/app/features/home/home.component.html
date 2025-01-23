@@ -1,0 +1,76 @@
+<div class="home-container">
+  <div class="split-layout">
+    <!-- Coluna da esquerda -->
+    <div class="left-column">
+      <div class="logo-section">
+        <img src="assets/spotify-logo.webp" alt="Spotify Logo" class="spotify-logo">
+        <h1 class="title">Spotify Timeline Generator</h1>
+      </div>
+
+      <app-auth-steps
+        [isLoggedIn]="isLoggedIn"
+        [selectedType]="selectedType"
+        [selectedTimeRange]="selectedTimeRange"
+        [loading]="loading"
+        (loginClick)="onLogin()"
+        (typeSelect)="onTypeSelect($event)"
+        (timeRangeSelect)="onTimeRangeSelect($event)">
+      </app-auth-steps>
+
+      <div class="refresh-container" *ngIf="isStepsCompleted">
+        <button pButton
+                icon="pi pi-refresh"
+                class="p-button-text p-button-rounded"
+                (click)="resetSteps()"
+                pTooltip="Start Over">
+        </button>
+      </div>
+    </div>
+
+    <!-- Coluna da direita -->
+    <div class="right-column" *ngIf="showContent">
+      <p-progressSpinner *ngIf="loading" styleClass="custom-spinner"></p-progressSpinner>
+
+      <div class="content-container" *ngIf="!loading && items.length > 0">
+        <div class="scroll-container">
+          <ng-container [ngSwitch]="selectedType">
+            <ng-container *ngSwitchCase="'tracks'">
+              <app-track-list [tracks]="items"></app-track-list>
+            </ng-container>
+            <ng-container *ngSwitchCase="'artists'">
+              <app-artist-list [artists]="items"></app-artist-list>
+            </ng-container>
+          </ng-container>
+        </div>
+
+        <!-- Botões fora do scroll-container -->
+        <div class="actions-container">
+          <button pButton
+                  [label]="'Create ' + selectedType + ' Playlist'"
+                  [icon]="playlistLoading ? 'pi pi-spinner pi-spin' : 'pi pi-music'"
+                  [class.loading]="playlistLoading"
+                  [class.success]="playlistCreated"
+                  (click)="createPlaylist()"
+                  [disabled]="playlistLoading || playlistCreated">
+          </button>
+
+          <button pButton
+                  *ngIf="playlistCreated"
+                  label="Open in Spotify"
+                  icon="pi pi-external-link"
+                  class="p-button-outlined"
+                  (click)="openPlaylist()">
+          </button>
+
+          <button pButton
+                  label="Generate Story"
+                  icon="pi pi-image"
+                  class="p-button-secondary"
+                  (click)="generateStory()"
+                  [disabled]="true">
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
