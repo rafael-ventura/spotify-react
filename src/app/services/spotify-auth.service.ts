@@ -53,29 +53,29 @@ export class SpotifyAuthService {
   }
 
 
-  handleCallback(hash: string): void {
-    try {
-      const params = new URLSearchParams(hash.substring(1));
-      const accessToken = params.get('access_token');
-      const expiresIn = params.get('expires_in');
+  handleCallback(hash: string): Promise<void> {
+    return new Promise((resolve, reject) => {
+      try {
+        const params = new URLSearchParams(hash.substring(1)); // Remove o '#'
+        const accessToken = params.get('access_token');
+        const expiresIn = params.get('expires_in');
 
-      if (accessToken && expiresIn) {
-        const expiresAt = Date.now() + parseInt(expiresIn) * 1000;
-        const tokenInfo: TokenInfo = {
-          token: accessToken,
-          expiresAt,
-        };
+        if (accessToken && expiresIn) {
+          const expiresAt = Date.now() + parseInt(expiresIn, 10) * 1000;
+          const tokenInfo = { token: accessToken, expiresAt };
 
-        localStorage.setItem('spotify_token_info', JSON.stringify(tokenInfo));
-        this.accessTokenSubject.next(accessToken);
-      } else {
-        throw new Error('Invalid Spotify callback parameters');
+          localStorage.setItem('spotify_token_info', JSON.stringify(tokenInfo));
+          this.accessTokenSubject.next(accessToken);
+          resolve(); // Resolve a Promise quando tudo é bem-sucedido
+        } else {
+          reject('Invalid callback parameters'); // Rejeita se os parâmetros não forem encontrados
+        }
+      } catch (error) {
+        reject(error); // Rejeita em caso de erro
       }
-    } catch (error) {
-      console.error('Error handling Spotify callback:', error);
-      this.logout(); // Limpa estado se algo der errado
-    }
+    });
   }
+
 
 
 

@@ -4,8 +4,8 @@ import { SpotifyAuthService } from '../../services/spotify-auth.service';
 
 @Component({
   selector: 'app-callback',
-  templateUrl: './callback.component.html', // Usando template separado
-  styleUrls: ['./callback.component.scss'] // Usando estilos separados
+  templateUrl: './callback.component.html',
+  styleUrls: ['./callback.component.scss']
 })
 export class CallbackComponent implements OnInit {
   constructor(
@@ -16,13 +16,14 @@ export class CallbackComponent implements OnInit {
   ngOnInit() {
     const hash = window.location.hash;
     if (hash) {
-      this.spotifyAuth.handleCallback(hash).then(() => {
-        this.router.navigate(['/']);
-      }).catch(err => {
-        console.error('Erro ao processar o callback do Spotify:', err);
-        // Opção: redirecionar para uma página de erro específica
-        this.router.navigate(['/error']);
-      });
+      this.spotifyAuth.handleCallback(hash)
+        .then(() => {
+          this.router.navigate(['/']);
+        })
+        .catch((err: Error) => {
+          console.error('Erro ao processar o callback do Spotify:', err.message);
+          this.router.navigate(['/error']);
+        });
     } else {
       console.warn('Nenhum hash encontrado na URL.');
       this.router.navigate(['/error']);
