@@ -35,7 +35,7 @@ jobs:
         run: npm ci
 
       - name: Build Angular Project (Production)
-        run: npm run build --configuration production  # Usando a configuração de produção
+        run: ng build --configuration production --project spotify-timeline  # Corrigido para incluir o nome do projeto
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
