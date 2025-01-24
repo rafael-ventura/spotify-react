@@ -49,7 +49,7 @@
                 }
               ],
               "outputHashing": "all",
-              "baseHref": "/spotify-timeline/"
+              "baseHref": "/"
             },
             "development": {
               "buildOptimizer": false,
