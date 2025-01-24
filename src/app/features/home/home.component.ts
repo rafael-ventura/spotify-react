@@ -19,7 +19,7 @@ export class HomeComponent implements OnInit {
   playlistLoading = false;
   playlistCreated = false;
   playlistUrl: string | null = null;
-  itemsPerPage = 10;
+  itemsPerPage = 5;
   currentPage = 1;
   itemsPerPageOptions = [
     { label: '5 items', value: 5 },

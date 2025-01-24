@@ -1,0 +1,32 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; // Garante que o componente ocupe pelo menos a altura total da tela
+}
+
+router-outlet {
+  flex: 1; // Permite que o router-outlet ocupe o espaço restante
+}
+
+// Adicionando estilos responsivos
+@media (max-width: 768px) {
+  :host {
+    padding: 1rem; // Adiciona um padding em telas menores
+  }
+
+  router-outlet {
+    // Ajustes específicos para o conteúdo dentro do router-outlet
+    padding: 0.5rem; // Ajusta o padding para telas menores
+  }
+}
+
+@media (max-width: 390px) {
+  :host {
+    padding: 0.5rem; // Reduz o padding em telas muito pequenas
+  }
+
+  router-outlet {
+    // Ajustes adicionais para telas muito pequenas
+    padding: 0; // Remove o padding
+  }
+}

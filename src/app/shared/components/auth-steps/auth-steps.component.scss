@@ -5,7 +5,7 @@
     gap: 1rem;
   }
 
-  .step {
+ .step {
     background: rgba(255, 255, 255, 0.05);
     border-radius: 12px;
     transition: all 0.3s ease;
@@ -33,58 +33,54 @@
       opacity: 0.5;
       cursor: not-allowed;
     }
-  }
 
-  .step-content {
-    display: flex;
-    align-items: center;
-    padding: 1.5rem;
-    border-left: 4px solid transparent;
-    transition: all 0.3s ease;
 
-    &.clickable {
-      cursor: pointer;
+    .step-content {
+      display: flex;
+      align-items: center;
+      padding: 1.5rem; // Mantém o padding original
+      border-left: 4px solid transparent;
 
-      &:hover {
-        background: rgba(30, 215, 96, 0.1);
-        .step-number {
-          transform: scale(1.1);
-          box-shadow: 0 0 15px rgba(30, 215, 96, 0.5);
+      @media (max-width: 768px) {
+        padding: 1rem; // Reduz o padding em telas menores
+      }
+
+      @media (max-width: 420px) {
+        padding: 0.5rem; // Ajusta o padding para telas muito pequenas
+      }
+      .step-info {
+        flex: 1;
+
+        h3 {
+          color: white;
+          margin: 0;
+          font-size: 1.2rem;
         }
-        .pi {
-          color: #1ed760;
-          transform: translateX(5px);
+
+        p {
+          color: #b3b3b3;
+          margin: 0.5rem 0 0;
+          font-size: 0.9rem;
         }
       }
     }
-  }
 
-  .step-number {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    background: #1ed760;
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: bold;
-    margin-right: 1rem;
-  }
-
-  .step-info {
-    flex: 1;
-
-    h3 {
+    .step-number {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #1ed760;
       color: white;
-      margin: 0;
-      font-size: 1.2rem;
-    }
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      margin-right: 1rem;
 
-    p {
-      color: #b3b3b3;
-      margin: 0.5rem 0 0;
-      font-size: 0.9rem;
+      @media (max-width: 420px) {
+        width: 24px; // Reduz a largura em telas menores
+        height: 24px; // Reduz a altura em telas menores
+      }
     }
   }
 
@@ -96,6 +92,12 @@
     :deep(.p-button) {
       background: transparent;
       border: 1px solid rgba(255, 255, 255, 0.1);
+      width: 100%; // Botões ocupam 100% da largura
+      max-width: 200px; // Limita a largura máxima dos botões
+
+      @media (max-width: 420px) {
+        max-width: 150px; // Limita a largura máxima dos botões em telas menores
+      }
 
       &:hover {
         background: rgba(255, 255, 255, 0.1);
@@ -110,6 +112,10 @@
   .pi {
     color: white;
     font-size: 1.2rem;
+
+    @media (max-width: 420px) {
+      font-size: 1rem; // Reduz o tamanho do ícone em telas menores
+    }
   }
 
   .custom-spinner {
