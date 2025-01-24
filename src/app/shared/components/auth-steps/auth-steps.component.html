@@ -21,11 +21,11 @@
         <h3>Choose Content</h3>
         <div class="choice-buttons" *ngIf="isLoggedIn && !selectedType" [@fadeIn]>
           <p-button label="Top Artists" icon="pi pi-users"
-            (onClick)="typeSelect.emit('artists')"
+            (onClick)="typeSelect.emit({ value: 'artists' })"
             styleClass="p-button-text">
           </p-button>
           <p-button label="Top Tracks" icon="pi pi-music"
-            (onClick)="typeSelect.emit('tracks')"
+            (onClick)="typeSelect.emit({ value: 'tracks' })"
             styleClass="p-button-text">
           </p-button>
         </div>
@@ -48,7 +48,7 @@
           <p-button *ngFor="let range of timeRanges"
             [label]="range.label"
             styleClass="p-button-text"
-            (onClick)="timeRangeSelect.emit(range.value)">
+            (onClick)="timeRangeSelect.emit({ value: range.value })">
           </p-button>
         </div>
         <p *ngIf="!selectedType">Choose your preferred time period</p>

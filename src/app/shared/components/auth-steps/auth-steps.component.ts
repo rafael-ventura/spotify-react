@@ -21,8 +21,8 @@ export class AuthStepsComponent {
   @Input() loading = false;
 
   @Output() loginClick = new EventEmitter<void>();
-  @Output() typeSelect = new EventEmitter<'artists' | 'tracks'>();
-  @Output() timeRangeSelect = new EventEmitter<string>();
+  @Output() typeSelect = new EventEmitter<{ value: 'artists' | 'tracks' }>();
+  @Output() timeRangeSelect = new EventEmitter<{ value: string }>();
 
   timeRanges = [
     { label: 'Last Month', value: 'short_term' },

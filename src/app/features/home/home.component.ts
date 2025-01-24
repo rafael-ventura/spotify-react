@@ -19,6 +19,14 @@ export class HomeComponent implements OnInit {
   playlistLoading = false;
   playlistCreated = false;
   playlistUrl: string | null = null;
+  itemsPerPage = 10;
+  currentPage = 1;
+  itemsPerPageOptions = [
+    { label: '5 items', value: 5 },
+    { label: '10 items', value: 10 },
+    { label: '25 items', value: 25 },
+    { label: '50 items', value: 50 }
+  ];
 
   timeRanges = [
     { label: 'Last Month', value: 'short_term' },
@@ -45,19 +53,19 @@ export class HomeComponent implements OnInit {
     this.spotifyAuth.login();
   }
 
-  onTypeSelect(type: 'artists' | 'tracks'): void {
-    this.selectedType = type;
+  onTypeSelect(event: { value: 'artists' | 'tracks' }): void {
+    this.selectedType = event.value;
     this.showContent = true;
   }
 
-  onTimeRangeSelect(range: string): void {
-    this.selectedTimeRange = range;
+  onTimeRangeSelect(event: { value: string }): void {
+    this.selectedTimeRange = event.value;
     this.loading = true;
     this.items = [];
     this.isStepsCompleted = true;
 
     if (this.selectedType === 'tracks') {
-      this.spotifyApi.getTopTracks(range).subscribe({
+      this.spotifyApi.getTopTracks(event.value).subscribe({
         next: (items: any[]) => {
           this.items = items;
           this.loading = false;
@@ -65,7 +73,7 @@ export class HomeComponent implements OnInit {
         error: this.handleError.bind(this)
       });
     } else if (this.selectedType === 'artists') {
-      this.spotifyApi.getTopArtists(range).subscribe({
+      this.spotifyApi.getTopArtists(event.value).subscribe({
         next: (items: any[]) => {
           this.items = items;
           this.loading = false;
@@ -114,11 +122,21 @@ export class HomeComponent implements OnInit {
         `My Top ${this.selectedType} - ${this.getTimeRangeLabel(this.selectedTimeRange!)}`
       ).toPromise();
 
-      // Adicionar tracks à playlist
       if (this.selectedType === 'tracks') {
         await this.spotifyApi.addTracksToPlaylist(
           playlist.id,
-          this.items.map(track => track.uri)
+          this.paginatedItems.map(track => track.uri)
+        ).toPromise();
+      } else {
+        const allTracks = [];
+        for (const artist of this.paginatedItems) {
+          const topTracks = await this.spotifyApi.getArtistTopTracks(artist.id).toPromise();
+          allTracks.push(...topTracks.slice(0, 5));
+        }
+
+        await this.spotifyApi.addTracksToPlaylist(
+          playlist.id,
+          allTracks.map(track => track.uri)
         ).toPromise();
       }
 
@@ -143,6 +161,90 @@ export class HomeComponent implements OnInit {
 
   getTimeRangeLabel(value: string): string {
     return this.timeRanges.find(range => range.value === value)?.label || '';
+  }
+
+  get paginatedItems() {
+    const start = (this.currentPage - 1) * this.itemsPerPage;
+    const end = start + this.itemsPerPage;
+    return this.items.slice(start, end);
+  }
+
+  async createRecommendedPlaylist(): Promise<void> {
+    this.playlistLoading = true;
+    try {
+      const profile = await this.spotifyApi.getUserProfile().toPromise();
+      let seedGenres: string[] = [];
+      let seedTracks: string[] = [];
+      let seedArtists: string[] = [];
+
+      if (this.selectedType === 'artists') {
+        // Get unique genres from selected artists
+        seedGenres = this.paginatedItems.flatMap(artist => artist.genres)
+          .filter((genre, index, self) => self.indexOf(genre) === index)
+          .slice(0, 2);
+
+        // Get some artist IDs as seeds
+        seedArtists = this.paginatedItems
+          .slice(0, 2)
+          .map(artist => artist.id);
+      } else {
+        // For tracks, use both track and artist seeds
+        seedTracks = this.paginatedItems
+          .slice(0, 2)
+          .map(track => track.id);
+
+        // Get artist IDs from the tracks
+        const artistIds = [...new Set(this.paginatedItems.flatMap(track =>
+          track.artists.map((artist: any) => artist.id)
+        ))];
+
+        seedArtists = artistIds.slice(0, 2);
+
+        // Get genres from the artists
+        const artists = await Promise.all(
+          artistIds.slice(0, 3).map(id =>
+            this.spotifyApi.getArtist(id).toPromise()
+          )
+        );
+
+        seedGenres = artists.flatMap(artist => artist.genres)
+          .filter((genre, index, self) => self.indexOf(genre) === index)
+          .slice(0, 2);
+      }
+
+      // Create playlist
+      const playlist = await this.spotifyApi.createPlaylist(
+        profile.id,
+        `Recommended based on your ${this.selectedType}`
+      ).toPromise();
+
+      // Get recommendations using all seed types
+      const recommendations = await this.spotifyApi.getRecommendations({
+        seed_genres: seedGenres,
+        seed_tracks: seedTracks,
+        seed_artists: seedArtists,
+        limit: Math.min(this.paginatedItems.length * 2, 30), // Dynamic limit based on selection
+        min_popularity: 50
+      }).toPromise();
+
+      // Add tracks to playlist
+      await this.spotifyApi.addTracksToPlaylist(
+        playlist.id,
+        recommendations.tracks.map((track: any) => track.uri)
+      ).toPromise();
+
+      this.playlistCreated = true;
+      this.playlistUrl = playlist.external_urls.spotify;
+    } catch (error) {
+      console.error('Error creating recommended playlist:', error);
+    } finally {
+      this.playlistLoading = false;
+    }
+  }
+
+  onItemsPerPageChange(event: any): void {
+    this.currentPage = 1; // Reset para primeira página quando mudar o número de items
+    this.itemsPerPage = event.value;
   }
 }
 

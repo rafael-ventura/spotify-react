@@ -26,6 +26,7 @@ import { CallbackModule } from './features/callback/callback.module';
     TimelineModule,
     CallbackModule
   ],
+  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

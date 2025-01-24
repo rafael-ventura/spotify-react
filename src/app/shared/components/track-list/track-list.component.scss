@@ -1,0 +1,76 @@
+.tracks-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.track-item {
+  display: flex;
+  align-items: center;
+  padding: 1.5rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  gap: 1.5rem;
+  transition: transform 0.2s ease;
+
+  &:hover {
+    transform: translateX(10px);
+    background: rgba(255, 255, 255, 0.08);
+  }
+}
+
+.rank {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: var(--spotify-green);
+  min-width: 3rem;
+}
+
+img {
+  width: 64px;
+  height: 64px;
+  border-radius: 4px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.info {
+  flex: 1;
+
+  h3 {
+    margin: 0;
+    color: white;
+    font-size: 1.2rem;
+  }
+
+  .artists {
+    color: var(--spotify-green);
+    margin: 0.25rem 0;
+    font-weight: 500;
+  }
+
+  .details {
+    display: flex;
+    gap: 1rem;
+    margin-top: 0.5rem;
+    font-size: 0.9rem;
+    color: #b3b3b3;
+
+    .album {
+      font-style: italic;
+    }
+
+    .duration {
+      color: #888;
+    }
+
+    .popularity {
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+
+      i {
+        color: var(--spotify-green);
+      }
+    }
+  }
+}

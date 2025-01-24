@@ -7,6 +7,7 @@ import { RippleModule } from 'primeng/ripple';
 import { ToastModule } from 'primeng/toast';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { MessageService, ConfirmationService } from 'primeng/api';
+import { DropdownModule } from 'primeng/dropdown';
 
 import { AuthStepsComponent } from './components/auth-steps/auth-steps.component';
 import { TrackListComponent } from './components/track-list/track-list.component';
@@ -25,7 +26,8 @@ import { ArtistListComponent } from './components/artist-list/artist-list.compon
     ProgressSpinnerModule,
     RippleModule,
     ToastModule,
-    ConfirmDialogModule
+    ConfirmDialogModule,
+    DropdownModule
   ],
   exports: [
     CardModule,
@@ -34,6 +36,7 @@ import { ArtistListComponent } from './components/artist-list/artist-list.compon
     RippleModule,
     ToastModule,
     ConfirmDialogModule,
+    DropdownModule,
     AuthStepsComponent,
     TrackListComponent,
     ArtistListComponent
