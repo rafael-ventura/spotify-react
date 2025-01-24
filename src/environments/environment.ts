@@ -1,8 +1,8 @@
 export const environment = {
-  production: false,
+  production: true,
   spotify: {
     clientId: '68d1b43e09794d51b64ad4083e57429f',
-    redirectUri: 'https://rafael-ventura.github.io/spotify-timeline/#/callback',
+    redirectUri: 'https://spotify-timeline-eight.vercel.app/callback',
     scopes: [
       'user-read-recently-played',
       'user-top-read',
