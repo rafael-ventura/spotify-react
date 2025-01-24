@@ -1,0 +1,15 @@
+<div class="timeline-view">
+  <div class="tracks-container" [@listAnimation]="tracks.length">
+    <div *ngFor="let track of tracks; let i = index" class="track-item" [@itemAnimation]="'in'">
+      <div class="track-rank">#{{i + 1}}</div>
+      <div class="track-content">
+        <img [src]="track.album.images[0].url" [alt]="track.name">
+        <div class="track-info">
+          <h3>{{track.name}}</h3>
+          <p>{{track.artists[0].name}}</p>
+          <p class="album-name">{{track.album.name}}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

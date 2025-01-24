@@ -1,0 +1,26 @@
+<div class="artists-list">
+  <div *ngFor="let artist of artists; let i = index"
+       class="artist-item"
+       [@fadeInUp]="i">
+    <div class="rank">#{{i + 1}}</div>
+    <img [src]="artist.images[0]?.url" [alt]="artist.name">
+    <div class="info">
+      <h3>{{artist.name}}</h3>
+      <div class="genres">
+        <span *ngFor="let genre of artist.genres.slice(0, 3); let last = last">
+          {{genre}}{{!last ? ', ' : ''}}
+        </span>
+      </div>
+      <div class="details">
+        <span class="popularity" [title]="'Popularity: ' + artist.popularity + '%'">
+          <i class="pi pi-chart-bar"></i>
+          {{artist.popularity}}%
+        </span>
+        <span class="followers">
+          <i class="pi pi-users"></i>
+          {{formatFollowers(artist.followers.total)}}
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
