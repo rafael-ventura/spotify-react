@@ -7,7 +7,7 @@ export const environment = {
       'user-read-recently-played',
       'user-top-read',
       'playlist-modify-public',
-      'playlist-modify-private'
-    ].join(' ')
-  }
+      'playlist-modify-private',
+    ].join(' '),
+  },
 };

@@ -49,14 +49,16 @@ export class SpotifyAuthService {
       show_dialog: 'true',
     });
 
-    window.location.href = `https://accounts.spotify.com/authorize?${params.toString()}`;
+    const url = `https://accounts.spotify.com/authorize?${params.toString()}`;
+    console.log('Generated Spotify login URL:', url); // Log para depuração
+    window.location.href = url;
   }
 
 
-  handleCallback(hash: string): Promise<void> {
+  handleCallback(): Promise<void> {
     return new Promise((resolve, reject) => {
       try {
-        const params = new URLSearchParams(hash.substring(1)); // Remove o `#`
+        const params = new URLSearchParams(window.location.search); // Captura os query parameters
         const accessToken = params.get('access_token');
         const expiresIn = params.get('expires_in');
 
@@ -67,16 +69,19 @@ export class SpotifyAuthService {
           localStorage.setItem('spotify_token_info', JSON.stringify(tokenInfo));
           this.accessTokenSubject.next(accessToken);
 
+          // Limpa a query string da URL
+          window.history.replaceState({}, document.title, '/');
           resolve();
         } else {
+          console.error('Callback parameters are invalid:', params.toString());
           reject('Invalid callback parameters');
         }
       } catch (error) {
+        console.error('Error during callback handling:', error);
         reject(error);
       }
     });
   }
-
 
   logout(): void {
     localStorage.removeItem('spotify_token_info');
