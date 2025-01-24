@@ -54,7 +54,6 @@ export class SpotifyAuthService {
     window.location.href = url;
   }
 
-
   handleCallback(): Promise<void> {
     return new Promise((resolve, reject) => {
       try {

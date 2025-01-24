@@ -14,8 +14,10 @@ export class CallbackComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    console.log('Iniciando o processo de callback...');
     this.spotifyAuth.handleCallback()
       .then(() => {
+        console.log('Callback processado com sucesso, redirecionando...');
         this.router.navigate(['/']); // Redireciona para a página inicial
       })
       .catch((err: Error) => {
@@ -23,6 +25,5 @@ export class CallbackComponent implements OnInit {
         this.router.navigate(['/error']); // Redireciona para uma página de erro, se necessário
       });
   }
-
 
 }
