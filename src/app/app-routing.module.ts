@@ -4,7 +4,6 @@ import { HomeComponent } from '@features/home/home.component';
 import { TimelineComponent } from '@features/timeline/timeline.component';
 import { CallbackComponent } from '@features/callback/callback.component';
 import { AuthGuard } from './guards/auth.guard';
-import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -12,14 +11,13 @@ const routes: Routes = [
     path: 'timeline',
     component: TimelineComponent,
     canActivate: [AuthGuard],
-    data: { requiresAuth: true }
+    data: { requiresAuth: true },
   },
-  { path: 'callback', component: CallbackComponent }
+  { path: 'callback', component: CallbackComponent },
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
-  providers: [{ provide: LocationStrategy, useClass: HashLocationStrategy }],
-  exports: [RouterModule]
+  imports: [RouterModule.forRoot(routes, { useHash: false })], // Certifique-se de que `useHash: false` está definido
+  exports: [RouterModule],
 })
 export class AppRoutingModule {}
