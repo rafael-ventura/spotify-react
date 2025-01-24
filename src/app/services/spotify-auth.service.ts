@@ -56,7 +56,7 @@ export class SpotifyAuthService {
   handleCallback(hash: string): Promise<void> {
     return new Promise((resolve, reject) => {
       try {
-        const params = new URLSearchParams(hash.substring(1)); // Remove o '#'
+        const params = new URLSearchParams(hash.replace('#', '')); // Remove o '#' e cria parâmetros
         const accessToken = params.get('access_token');
         const expiresIn = params.get('expires_in');
 
@@ -66,18 +66,15 @@ export class SpotifyAuthService {
 
           localStorage.setItem('spotify_token_info', JSON.stringify(tokenInfo));
           this.accessTokenSubject.next(accessToken);
-          resolve(); // Resolve a Promise quando tudo é bem-sucedido
+          resolve(); // Token processado com sucesso
         } else {
-          reject('Invalid callback parameters'); // Rejeita se os parâmetros não forem encontrados
+          reject(new Error('Invalid callback parameters'));
         }
       } catch (error) {
-        reject(error); // Rejeita em caso de erro
+        reject(error);
       }
     });
   }
-
-
-
 
   logout(): void {
     localStorage.removeItem('spotify_token_info');

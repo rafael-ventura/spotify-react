@@ -22,11 +22,12 @@ export class CallbackComponent implements OnInit {
         })
         .catch((err: Error) => {
           console.error('Erro ao processar o callback do Spotify:', err.message);
-          this.router.navigate(['/error']);
+          this.router.navigate(['/error']); // Redireciona para uma página de erro
         });
     } else {
       console.warn('Nenhum hash encontrado na URL.');
-      this.router.navigate(['/error']);
+      this.router.navigate(['/error']); // Redireciona se não houver hash
     }
   }
+
 }
