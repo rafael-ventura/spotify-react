@@ -11,22 +11,23 @@ export class CallbackComponent implements OnInit {
   constructor(
     private router: Router,
     private spotifyAuth: SpotifyAuthService
-  ) {}
+  ) { }
 
   ngOnInit() {
     const hash = window.location.hash;
+
     if (hash) {
       this.spotifyAuth.handleCallback(hash)
         .then(() => {
-          this.router.navigate(['/']);
+          this.router.navigate(['/']); // Redireciona para a página inicial
         })
         .catch((err: Error) => {
           console.error('Erro ao processar o callback do Spotify:', err.message);
-          this.router.navigate(['/error']); // Redireciona para uma página de erro
+          this.router.navigate(['/error']); // Redireciona para uma página de erro, se necessário
         });
     } else {
       console.warn('Nenhum hash encontrado na URL.');
-      this.router.navigate(['/error']); // Redireciona se não houver hash
+      this.router.navigate(['/error']); // Redireciona para erro se o hash estiver ausente
     }
   }
 
