@@ -35,7 +35,7 @@ jobs:
         run: npm ci
 
       - name: Build Angular Project
-        run: ng build  # Comando normal sem especificar explicitamente o ambiente, pois o padrão é produção
+        run: npm run build  # Comando normal sem especificar explicitamente o ambiente, pois o padrão é produção
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
