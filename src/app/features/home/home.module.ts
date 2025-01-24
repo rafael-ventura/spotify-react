@@ -2,8 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HomeComponent } from './home.component';
-import { AuthStepsComponent } from '../../shared/components/auth-steps/auth-steps.component'; // Ensure correct import
-import { SharedModule } from '../../shared/shared.module';
+import { SharedModule } from '@shared/shared.module';
 import { HomeRoutingModule } from './home-routing.module';
 
 // PrimeNG Modules
@@ -19,6 +18,12 @@ import { TooltipModule } from 'primeng/tooltip';
   imports: [
     CommonModule,
     FormsModule,
+    SharedModule,
+    HomeRoutingModule,
+    ProgressSpinnerModule,
+    DropdownModule,
+    ButtonModule,
+    TooltipModule,
     SharedModule,
     HomeRoutingModule,
     ProgressSpinnerModule,
