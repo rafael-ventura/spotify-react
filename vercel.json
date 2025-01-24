@@ -1,19 +1,6 @@
 {
   "version": 2,
   "rewrites": [
-    {
-      "source": "/(.*)",
-      "destination": "/index.html"
-    }
-  ],
-  "headers": [
-    {
-      "source": "/(.*)",
-      "headers": [
-        { "key": "Cache-Control", "value": "no-cache" },
-        { "key": "Content-Type", "value": "text/html; charset=utf-8" }
-      ]
-    }
-  ],
-  "cleanUrls": true
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
 }
