@@ -34,10 +34,8 @@ jobs:
       - name: Install Dependencies
         run: npm ci
 
-      - name: Build
-        run: npm run build
-        env:
-          NODE_ENV: production
+      - name: Build Angular Project (Production)
+        run: npm run build --configuration production  # Usando a configuração de produção
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
@@ -45,7 +43,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: dist/spotify-timeline
+          path: dist/spotify-timeline  # Certifique-se de que o caminho para o build esteja correto
 
       - name: Deploy to GitHub Pages
         id: deployment
