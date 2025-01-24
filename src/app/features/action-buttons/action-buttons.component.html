@@ -1,0 +1,21 @@
+<div class="actions-container">
+  <button pButton [label]="'Create ' + selectedType + ' Playlist'"
+    [icon]="playlistLoading ? 'pi pi-spinner pi-spin' : 'pi pi-music'"
+    [class.loading]="playlistLoading"
+    [class.success]="playlistCreated"
+    (click)="onCreatePlaylist()"
+    [disabled]="playlistLoading || playlistCreated">
+  </button>
+
+  <button pButton *ngIf="playlistCreated" label="Open in Spotify" icon="pi pi-external-link"
+    class="p-button-outlined" (click)="onOpenPlaylist()">
+  </button>
+
+  <button pButton label="Generate Story" icon="pi pi-image" class="p-button-secondary"
+    (click)="onGenerateStory()" [disabled]="true">
+  </button>
+
+  <button pButton label="Create Recommended Playlist" icon="pi pi-magic"
+    (click)="onCreateRecommendedPlaylist()" [loading]="playlistLoading" class="p-button-help">
+  </button>
+</div>
