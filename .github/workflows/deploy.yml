@@ -35,7 +35,7 @@ jobs:
         run: npm ci
 
       - name: Build Angular Project
-        run: npm run build
+        run: npm run build  # Usando o script que inclui o baseHref
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
@@ -43,7 +43,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: dist/spotify-timeline  # Certifique-se de que o caminho de saída está correto
+          path: dist/spotify-timeline
 
       - name: Deploy to GitHub Pages
         id: deployment
